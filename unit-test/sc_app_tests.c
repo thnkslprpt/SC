@@ -429,7 +429,7 @@ void SC_AppInit_Test_SBCreatePipeError(void)
 
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "Software Bus Create Pipe returned: 0x%%08X");
 
-    /* Set CFE_SB_CreatePipe to return -1 in order to generate error message SC_INIT_SB_CREATE_ERR_EID */
+    /* Set CFE_SB_CreatePipe to return -1 in order to generate error message SC_CR_PIPE_ERR_EID */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_CreatePipe), 1, -1);
 
     /* Execute the function being tested */
@@ -438,7 +438,7 @@ void SC_AppInit_Test_SBCreatePipeError(void)
     /* Verify results */
     UtAssert_True(ReturnValue == -1, "ReturnValue == -1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INIT_SB_CREATE_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CR_PIPE_ERR_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 
     strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);

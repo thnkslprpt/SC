@@ -2070,7 +2070,7 @@ void SC_ProcessCommand_Test_ResetCounters(void)
     UtAssert_True(SC_OperData.HkPacket.RtsActiveCtr == 0, "RtsActiveCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.RtsActiveErrCtr == 0, "RtsActiveErrCtr == 0");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RESET_DEB_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RESET_INF_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_DEBUG);
 
     strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
@@ -3210,7 +3210,7 @@ void SC_ProcessCommand_Test_InvalidCmdError(void)
     UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "CmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "CmdErrCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_INVLD_CMD_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CC_ERR_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 
     strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
