@@ -477,7 +477,7 @@ void SC_ResetCountersCmd(const CFE_SB_Buffer_t *BufPtr)
 {
     if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_NoArgsCmd_t)))
     {
-        CFE_EVS_SendEvent(SC_RESET_DEB_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
+        CFE_EVS_SendEvent(SC_RESET_INF_EID, CFE_EVS_EventType_DEBUG, "Reset counters command");
 
         SC_OperData.HkPacket.CmdCtr          = 0;
         SC_OperData.HkPacket.CmdErrCtr       = 0;
@@ -699,8 +699,7 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
 #endif
 
         default:
-            CFE_EVS_SendEvent(SC_INVLD_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "Invalid Command Code: MID =  0x%08lX CC =  %d",
+            CFE_EVS_SendEvent(SC_CC_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid Command Code: MID =  0x%08lX CC =  %d",
                               (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode);
             SC_OperData.HkPacket.CmdErrCtr++;
             break;

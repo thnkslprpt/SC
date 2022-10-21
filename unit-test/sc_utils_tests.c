@@ -158,7 +158,7 @@ void SC_VerifyCmdLength_Test_LenError(void)
     UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "SC_OperData.HkPacket.CmdCtr == 0");
     UtAssert_True(SC_OperData.HkPacket.CmdErrCtr == 1, "SC_OperData.HkPacket.CmdErrCtr == 1");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 
     strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);
@@ -197,7 +197,7 @@ void SC_VerifyCmdLength_Test_LenErrorNotMID(void)
     UtAssert_True(Result == false, "Result == false");
     UtAssert_True(SC_OperData.HkPacket.CmdCtr == 0, "SC_OperData.HkPacket.CmdCtr == 0");
 
-    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_LEN_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventType, CFE_EVS_EventType_ERROR);
 
     strCmpResult = strncmp(ExpectedEventString, context_CFE_EVS_SendEvent[0].Spec, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH);

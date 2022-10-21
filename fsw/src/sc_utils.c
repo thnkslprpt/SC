@@ -162,7 +162,7 @@ bool SC_VerifyCmdLength(const CFE_MSG_Message_t *Msg, size_t ExpectedLength)
         CFE_MSG_GetMsgId(Msg, &MessageID);
         CFE_MSG_GetFcnCode(Msg, &CommandCode);
 
-        CFE_EVS_SendEvent(SC_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
+        CFE_EVS_SendEvent(SC_CMD_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Invalid msg length: ID = 0x%08lX, CC = %d, Len = %d, Expected = %d",
                           (unsigned long)CFE_SB_MsgIdToValue(MessageID), CommandCode, (int)ActualLength,
                           (int)ExpectedLength);
