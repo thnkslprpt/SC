@@ -169,7 +169,7 @@ int32 SC_AppInit(void)
     }
 
     /* Must be able to register for events */
-    Result = CFE_EVS_Register(NULL, 0, CFE_EVS_NO_FILTER);
+    Result = CFE_EVS_Register(NULL, 0, CFE_EVS_EventFilter_BINARY);
     if (Result != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Event Services Register returned: 0x%08X\n", (unsigned int)Result);
