@@ -221,6 +221,13 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
             }
             break;
 
+        case SC_CONTINUE_RTS_ON_FAILURE_CC:
+            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_ContinueRtsOnFailureCmd_t)))
+            {
+                SC_ContinueRtsOnFailureCmd((const SC_ContinueRtsOnFailureCmd_t *)BufPtr);
+            }
+            break;
+
         case SC_APPEND_ATS_CC:
             if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_AppendAtsCmd_t)))
             {

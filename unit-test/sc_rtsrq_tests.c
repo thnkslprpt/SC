@@ -1062,6 +1062,72 @@ void SC_AutoStartRts_Test_InvalidIdZero(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
+void ContinueRtsOnFailureCmd_Test_Nominal(void)
+{
+    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
+    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_RTS_ON_FAILURE_CC;
+
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_ContinueRtsOnFailureCmd_t), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+
+    UT_CmdBuf.ContinueRtsOnFailureCmd.Payload.ContinueState = SC_RtsCont_TRUE;
+
+    /* Execute the function being tested */
+    UtAssert_VOIDCALL(SC_ContinueRtsOnFailureCmd(&UT_CmdBuf.ContinueRtsOnFailureCmd));
+
+    /* Verify results */
+    UtAssert_True(SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag == SC_RtsCont_TRUE,
+                  "SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag == SC_RtsCont_TRUE");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
+
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
+                      SC_CONT_RTS_CMD_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
+void ContinueRtsOnFailureCmd_Test_FalseState(void)
+{
+    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
+    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_RTS_ON_FAILURE_CC;
+
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_ContinueRtsOnFailureCmd_t), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+
+    UT_CmdBuf.ContinueRtsOnFailureCmd.Payload.ContinueState = SC_RtsCont_FALSE;
+
+    /* Execute the function being tested */
+    UtAssert_VOIDCALL(SC_ContinueRtsOnFailureCmd(&UT_CmdBuf.ContinueRtsOnFailureCmd));
+
+    /* Verify results */
+    UtAssert_True(SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag == SC_RtsCont_FALSE,
+                  "SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag == SC_RtsCont_FALSE");
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdCtr == 1, "SC_OperData.HkPacket.Payload.CmdCtr == 1");
+
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID,
+                      SC_CONT_RTS_CMD_INF_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
+void ContinueRtsOnFailureCmd_Test_InvalidState(void)
+{
+    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
+    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_RTS_ON_FAILURE_CC;
+
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(SC_ContinueRtsOnFailureCmd_t), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+
+    UT_CmdBuf.ContinueRtsOnFailureCmd.Payload.ContinueState = (SC_RtsCont_Enum_t)99;
+
+    /* Execute the function being tested */
+    UtAssert_VOIDCALL(SC_ContinueRtsOnFailureCmd(&UT_CmdBuf.ContinueRtsOnFailureCmd));
+
+    /* Verify results */
+    UtAssert_True(SC_OperData.HkPacket.Payload.CmdErrCtr == 1, "SC_OperData.HkPacket.Payload.CmdErrCtr == 1");
+
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CONT_RTS_CMD_ERR_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
 void UtTest_Setup(void)
 {
     UtTest_Add(SC_StartRtsCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_StartRtsCmd_Test_Nominal");
@@ -1152,4 +1218,10 @@ void UtTest_Setup(void)
     UtTest_Add(SC_AutoStartRts_Test_InvalidId, SC_Test_Setup, SC_Test_TearDown, "SC_AutoStartRts_Test_InvalidId");
     UtTest_Add(SC_AutoStartRts_Test_InvalidIdZero, SC_Test_Setup, SC_Test_TearDown,
                "SC_AutoStartRts_Test_InvalidIdZero");
+    UtTest_Add(ContinueRtsOnFailureCmd_Test_Nominal, SC_Test_Setup, SC_Test_TearDown,
+               "ContinueRtsOnFailureCmd_Test_Nominal");
+    UtTest_Add(ContinueRtsOnFailureCmd_Test_FalseState, SC_Test_Setup, SC_Test_TearDown,
+               "ContinueRtsOnFailureCmd_Test_FalseState");
+    UtTest_Add(ContinueRtsOnFailureCmd_Test_InvalidState, SC_Test_Setup, SC_Test_TearDown,
+               "ContinueRtsOnFailureCmd_Test_InvalidState");
 }

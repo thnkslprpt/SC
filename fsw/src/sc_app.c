@@ -148,7 +148,10 @@ CFE_Status_t SC_AppInit(void)
     SC_OperData.NumCmdsWakeup = 0;
 
     /* Continue ATS execution if ATS command checksum fails */
-    SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_FAILURE_START;
+    SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag = SC_CONT_ON_ATS_FAILURE_START;
+
+    /* Continue RTS execution if RTS command checksum fails */
+    SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag = SC_CONT_ON_RTS_FAILURE_START;
 
     SC_AppData.EnableHeaderUpdate = SC_PLATFORM_ENABLE_HEADER_UPDATE;
 

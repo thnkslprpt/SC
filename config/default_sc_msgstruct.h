@@ -227,6 +227,17 @@ typedef struct
 } SC_ContinueAtsOnFailureCmd_t;
 
 /**
+ *  \brief Continue RTS on failure command
+ *
+ *  For command details see #SC_CONTINUE_RTS_ON_FAILURE_CC
+ */
+typedef struct
+{
+    CFE_MSG_CommandHeader_t                 CommandHeader; /**< \brief Command Header */
+    SC_SetContinueRtsOnFailureCmd_Payload_t Payload;
+} SC_ContinueRtsOnFailureCmd_t;
+
+/**
  *  \brief Manage Table Command
  *
  *  For command details see #SC_MANAGE_TABLE_CC

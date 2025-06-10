@@ -155,7 +155,7 @@ typedef uint8 SC_TimeRef_Enum_t;
 #define SC_INVALID_RTS_NUMBER 0 /**< \brief Invalid RTS number */
 
 /**
- * SC Continue After Failure Enumeration
+ * SC Continue ATS After Failure Enumeration
  */
 enum SC_AtsCont
 {
@@ -164,6 +164,17 @@ enum SC_AtsCont
 };
 
 typedef uint8 SC_AtsCont_Enum_t;
+
+/**
+ * SC Continue RTS After Failure Enumeration
+ */
+enum SC_RtsCont
+{
+    SC_RtsCont_FALSE = false, /**< \brief Do not continue RTS on failure */
+    SC_RtsCont_TRUE  = true   /**< \brief Continue RTS on failure */
+};
+
+typedef uint8 SC_RtsCont_Enum_t;
 
 #ifndef SC_OMIT_DEPRECATED
 /**
@@ -192,10 +203,10 @@ typedef struct
     SC_AtsId_Enum_t   CurrAtsId;                /**< \brief Current ATS number: 1 = ATS A, 2 = ATS B */
     SC_Status_Enum_t  AtpState;                 /**< \brief Current ATP state: 2 = IDLE, 5 = EXECUTING */
     SC_AtsCont_Enum_t ContinueAtsOnFailureFlag; /**< \brief Continue ATS execution on failure flag */
+    SC_RtsCont_Enum_t ContinueRtsOnFailureFlag; /**< \brief Continue RTS execution on checksum failure flag */
 
     uint8 CmdErrCtr; /**< \brief Counts Request Errors */
     uint8 CmdCtr;    /**< \brief Counts Ground Requests */
-    uint8 Padding8;  /**< \brief Structure padding */
 
     uint16           SwitchPendFlag;  /**< \brief Switch pending flag: 0 = NO, 1 = YES */
     uint16           NumRtsActive;    /**< \brief Number of RTSs currently active */
@@ -276,6 +287,15 @@ typedef struct
     SC_AtsCont_Enum_t ContinueState; /**< \brief true or false, to continue ATS after a failure  */
     uint16            Padding;       /**< \brief Structure Padding */
 } SC_SetContinueAtsOnFailureCmd_Payload_t;
+
+/**
+ *  \brief Continue RTS on failure command Payload
+ */
+typedef struct
+{
+    SC_RtsCont_Enum_t ContinueState; /**< \brief true or false, to continue RTS after a failure  */
+    uint16            Padding;       /**< \brief Structure Padding */
+} SC_SetContinueRtsOnFailureCmd_Payload_t;
 
 /**
  *  \brief Append to ATS Command Payload

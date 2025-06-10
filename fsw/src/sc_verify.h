@@ -187,10 +187,16 @@
 #error SC_ATS_CMD_STAT_TABLE_NAME must be defined!
 #endif
 
-#ifndef SC_CONT_ON_FAILURE_START
-#error SC_CONT_ON_FAILURE_START must be defined!
-#elif ((SC_CONT_ON_FAILURE_START != SC_AtsCont_TRUE) && (SC_CONT_ON_FAILURE_START != SC_AtsCont_FALSE))
-#error SC_CONT_ON_FAILURE_START must be either SC_AtsCont_TRUE or SC_AtsCont_FALSE!
+#ifndef SC_CONT_ON_ATS_FAILURE_START
+#error SC_CONT_ON_ATS_FAILURE_START must be defined!
+#elif ((SC_CONT_ON_ATS_FAILURE_START != SC_AtsCont_TRUE) && (SC_CONT_ON_ATS_FAILURE_START != SC_AtsCont_FALSE))
+#error SC_CONT_ON_ATS_FAILURE_START must be either SC_AtsCont_TRUE or SC_AtsCont_FALSE!
+#endif
+
+#ifndef SC_CONT_ON_RTS_FAILURE_START
+#error SC_CONT_ON_RTS_FAILURE_START must be defined!
+#elif ((SC_CONT_ON_RTS_FAILURE_START != SC_RtsCont_TRUE) && (SC_CONT_ON_RTS_FAILURE_START != SC_RtsCont_FALSE))
+#error SC_CONT_ON_RTS_FAILURE_START must be either SC_RtsCont_TRUE or SC_RtsCont_FALSE!
 #endif
 
 #ifndef SC_TIME_TO_USE

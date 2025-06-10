@@ -647,7 +647,7 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
     {
         SC_OperData.HkPacket.Payload.CmdErrCtr++;
 
-        CFE_EVS_SendEvent(SC_CONT_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
+        CFE_EVS_SendEvent(SC_CONT_ATS_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Continue ATS On Failure command  failed, invalid state: %lu", (unsigned long)State);
     }
     else
@@ -656,7 +656,7 @@ void SC_ContinueAtsOnFailureCmd(const SC_ContinueAtsOnFailureCmd_t *Cmd)
 
         SC_OperData.HkPacket.Payload.CmdCtr++;
 
-        CFE_EVS_SendEvent(SC_CONT_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
+        CFE_EVS_SendEvent(SC_CONT_ATS_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
                           "Continue-ATS-On-Failure command, State: %lu",
                           (unsigned long)State);
     }

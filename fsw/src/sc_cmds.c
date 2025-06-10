@@ -380,12 +380,6 @@ void SC_ProcessRtpCommand(void)
         { /* the checksum failed */
 
             /*
-             ** Send an event message to report the invalid command status
-             */
-            CFE_EVS_SendEvent(SC_RTS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "RTS %03u Command Failed Checksum: RTS Stopped",
-                              SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
-            /*
             ** Update the RTS command error counter and last RTS error info
             */
             SC_OperData.HkPacket.Payload.RtsCmdErrCtr++;
@@ -394,9 +388,37 @@ void SC_ProcessRtpCommand(void)
             SC_OperData.HkPacket.Payload.LastRtsErrCmd = CmdOffset;
 
             /*
-             ** Stop the RTS from executing
+             ** Check if RTS should continue or abort on checksum failure
              */
-            SC_KillRts(RtsIndex);
+            if (SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag == false)
+            {
+                /*
+                 ** Send an event message to report the checksum failure and RTS abortion
+                 */
+                CFE_EVS_SendEvent(SC_RTS_CHKSUM_ERR_EID, CFE_EVS_EventType_ERROR,
+                                  "RTS %03u Command Failed Checksum: RTS Stopped",
+                                  SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum));
+
+                /*
+                 ** Stop the RTS from executing
+                 */
+                SC_KillRts(RtsIndex);
+            }
+            else
+            {
+                /*
+                 ** Send an event message to report the checksum failure but RTS continuation
+                 */
+                CFE_EVS_SendEvent(SC_RTS_CHKSUM_CONT_EID, CFE_EVS_EventType_ERROR,
+                                  "RTS %03u Command Failed Checksum at Offset %u: Command Skipped",
+                                  SC_IDNUM_AS_UINT(SC_OperData.RtsCtrlBlckAddr->CurrRtsNum),
+                                  SC_IDNUM_AS_UINT(CmdOffset));
+
+                /*
+                 ** Continue with next RTS command
+                 */
+                SC_GetNextRtsCommand();
+            }
         } /* end if */
     }     /* end if */
 }

@@ -498,6 +498,26 @@ void SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength(void)
     UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
 }
 
+void SC_ProcessCommand_Test_ContinueRtsOnFailureCmdInvalidLength(void)
+{
+    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
+    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_RTS_ON_FAILURE_CC;
+
+    UT_SC_Dispatch_SetMsgId(TestMsgId);
+    UT_SC_Dispatch_SetFcnCode(FcnCode);
+    UT_SC_Dispatch_SetMsgSize(sizeof(CFE_MSG_Message_t) - 1);
+
+    /* Execute the function being tested */
+    SC_ProcessCommand(&UT_CmdBuf.Buf);
+
+    /* Verify results */
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdCtr, 0);
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.CmdErrCtr, 1);
+
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_CMD_LEN_ERR_EID);
+}
+
 void SC_ProcessCommand_Test_AppendAtsCmdInvalidLength(void)
 {
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
@@ -794,6 +814,22 @@ void SC_ProcessCommand_Test_ContinueAtsOnFailureCmdNominal(void)
     UtAssert_STUB_COUNT(SC_ContinueAtsOnFailureCmd, 1);
 }
 
+void SC_ProcessCommand_Test_ContinueRtsOnFailureCmdNominal(void)
+{
+    CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
+    CFE_MSG_FcnCode_t FcnCode   = SC_CONTINUE_RTS_ON_FAILURE_CC;
+
+    UT_SC_Dispatch_SetMsgId(TestMsgId);
+    UT_SC_Dispatch_SetFcnCode(FcnCode);
+    UT_SC_Dispatch_SetMsgSize(sizeof(SC_ContinueRtsOnFailureCmd_t));
+
+    /* Execute the function being tested */
+    SC_ProcessCommand(&UT_CmdBuf.Buf);
+
+    /* Verify results */
+    UtAssert_STUB_COUNT(SC_ContinueRtsOnFailureCmd, 1);
+}
+
 void SC_ProcessCommand_Test_AppendAtsCmdNominal(void)
 {
     CFE_SB_MsgId_t    TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
@@ -976,6 +1012,8 @@ void UtTest_Setup(void)
                "SC_ProcessCommand_Test_JumpAtsCmdNominal");
     UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureCmdNominal, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_ContinueAtsOnFailureCmdNominal");
+    UtTest_Add(SC_ProcessCommand_Test_ContinueRtsOnFailureCmdNominal, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessCommand_Test_ContinueRtsOnFailureCmdNominal");
     UtTest_Add(SC_ProcessCommand_Test_AppendAtsCmdNominal, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_AppendAtsCmdNominal");
     UtTest_Add(SC_ProcessCommand_Test_TableManageCmdNominal, SC_Test_Setup, SC_Test_TearDown,
@@ -1011,6 +1049,8 @@ void UtTest_Setup(void)
                "SC_ProcessCommand_Test_JumpAtsCmdInvalidLength");
     UtTest_Add(SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_ContinueAtsOnFailureCmdInvalidLength");
+    UtTest_Add(SC_ProcessCommand_Test_ContinueRtsOnFailureCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessCommand_Test_ContinueRtsOnFailureCmdInvalidLength");
     UtTest_Add(SC_ProcessCommand_Test_AppendAtsCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessCommand_Test_AppendAtsCmdInvalidLength");
     UtTest_Add(SC_ProcessCommand_Test_TableManageCmdInvalidLength, SC_Test_Setup, SC_Test_TearDown,

@@ -52,11 +52,11 @@ int32 Ut_CFE_TIME_CompareHookAlessthanB(void *UserObj, int32 StubRetcode, uint32
 
 void SC_ProcessAtpCmd_Test_SwitchCmd(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_SWITCH_ATS_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     StatusEntryPtr = SC_GetAtsStatusEntryForCommand(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -99,11 +99,11 @@ void SC_ProcessAtpCmd_Test_SwitchCmd(void)
 
 void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_NOOP_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -146,11 +146,11 @@ void SC_ProcessAtpCmd_Test_NonSwitchCmd(void)
 
 void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_SWITCH_ATS_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -197,11 +197,11 @@ void SC_ProcessAtpCmd_Test_InlineSwitchError(void)
 
 void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_NOOP_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -248,11 +248,11 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsA(void)
 
 void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_NOOP_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(1);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -299,12 +299,12 @@ void SC_ProcessAtpCmd_Test_SBErrorAtsB(void)
 
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_SWITCH_ATS_CC;
     bool                          ChecksumValid;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -354,12 +354,12 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsA(void)
 
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_SWITCH_ATS_CC;
     bool                          ChecksumValid;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(1);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -409,12 +409,12 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsB(void)
 
 void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_SWITCH_ATS_CC;
     bool                          ChecksumValid;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -463,9 +463,9 @@ void SC_ProcessAtpCmd_Test_ChecksumFailedAtsAContinue(void)
 
 void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -500,9 +500,9 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsA(void)
 
 void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(1);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -537,7 +537,7 @@ void SC_ProcessAtpCmd_Test_CmdNumberMismatchAtsB(void)
 
 void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
@@ -568,7 +568,7 @@ void SC_ProcessAtpCmd_Test_CmdNotLoaded(void)
 
 void SC_ProcessAtpCmd_Test_CompareAbsTime(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
@@ -599,7 +599,7 @@ void SC_ProcessAtpCmd_Test_CompareAbsTime(void)
 
 void SC_ProcessAtpCmd_Test_AtpState(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     SC_AtsIndex_t                 AtsIndex = SC_ATS_IDX_C(0);
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
@@ -627,11 +627,11 @@ void SC_ProcessAtpCmd_Test_AtpState(void)
 
 void SC_ProcessAtpCmd_Test_CmdMid(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_INVALID_MSG_ID;
     CFE_MSG_FcnCode_t             FcnCode   = SC_SWITCH_ATS_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     CmdOffsetRec   = SC_GetAtsEntryOffsetForCmd(AtsIndex, SC_COMMAND_IDX_C(0));
@@ -731,7 +731,8 @@ void SC_ProcessRtpCommand_Test_BadSoftwareBusReturn(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
 }
 
-void SC_ProcessRtpCommand_Test_BadChecksum(void)
+
+void SC_ProcessRtpCommand_Test_ChecksumFailedRtsContinue(void)
 {
     bool               ChecksumValid;
     SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(0);
@@ -746,6 +747,54 @@ void SC_ProcessRtpCommand_Test_BadChecksum(void)
 
     SC_AppData.EnableHeaderUpdate = false;
 
+    /* Set ContinueRtsOnFailureFlag to TRUE to test continue behavior */
+    SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag = SC_RtsCont_TRUE;
+
+    /* Set to return false in order to generate error message SC_RTS_CHKSUM_CONT_EID */
+    ChecksumValid = false;
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
+
+    /* Execute the function being tested */
+    UtAssert_VOIDCALL(SC_ProcessRtpCommand());
+
+    /* Verify results - RTS should continue, not be killed */
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.RtsCmdCtr, 0);
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.RtsCmdErrCtr, 1);
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsWakeup, 1);
+    UtAssert_UINT32_EQ(RtsInfoPtr->CmdCtr, 0);
+    UtAssert_UINT32_EQ(RtsInfoPtr->CmdErrCtr, 1);
+
+    /* Verify SC_KillRts was NOT called (RTS should continue) */
+    UtAssert_STUB_COUNT(SC_KillRts, 0);
+
+    /* Verify SC_GetNextRtsCommand was called to continue */
+    UtAssert_STUB_COUNT(SC_GetNextRtsCommand, 1);
+
+    SC_Assert_ID_VALUE(SC_OperData.HkPacket.Payload.LastRtsErrSeq, 1);
+    SC_Assert_IDX_VALUE(SC_OperData.HkPacket.Payload.LastRtsErrCmd, 0);
+
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_RTS_CHKSUM_CONT_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
+void SC_ProcessRtpCommand_Test_ChecksumFailedRts(void)
+{
+    bool               ChecksumValid;
+    SC_RtsIndex_t      RtsIndex = SC_RTS_IDX_C(0);
+    SC_RtsInfoEntry_t *RtsInfoPtr;
+
+    RtsInfoPtr = SC_GetRtsInfoObject(RtsIndex);
+
+    SC_AppData.NextCmdTime[SC_Process_RTP]  = 0;
+    SC_AppData.CurrentTime                  = 1;
+    SC_OperData.RtsCtrlBlckAddr->CurrRtsNum = SC_RtsIndexToNum(RtsIndex);
+    RtsInfoPtr->RtsStatus                   = SC_Status_EXECUTING;
+
+    SC_AppData.EnableHeaderUpdate = false;
+
+    /* Set ContinueRtsOnFailureFlag to FALSE to test abort behavior */
+    SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag = SC_RtsCont_FALSE;
+
     /* Set to return false in order to generate error message SC_RTS_CHKSUM_ERR_EID */
     ChecksumValid = false;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_ValidateChecksum), &ChecksumValid, sizeof(ChecksumValid), false);
@@ -753,12 +802,19 @@ void SC_ProcessRtpCommand_Test_BadChecksum(void)
     /* Execute the function being tested */
     UtAssert_VOIDCALL(SC_ProcessRtpCommand());
 
-    /* Verify results */
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsCmdCtr == 0, "SC_OperData.HkPacket.Payload.RtsCmdCtr == 0");
-    UtAssert_True(SC_OperData.HkPacket.Payload.RtsCmdErrCtr == 1, "SC_OperData.HkPacket.Payload.RtsCmdErrCtr == 1");
-    UtAssert_True(SC_OperData.NumCmdsWakeup == 1, "SC_OperData.NumCmdsWakeup == 1");
+    /* Verify results - RTS should be killed */
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.RtsCmdCtr, 0);
+    UtAssert_UINT32_EQ(SC_OperData.HkPacket.Payload.RtsCmdErrCtr, 1);
+    UtAssert_UINT32_EQ(SC_OperData.NumCmdsWakeup, 1);
     UtAssert_UINT32_EQ(RtsInfoPtr->CmdCtr, 0);
     UtAssert_UINT32_EQ(RtsInfoPtr->CmdErrCtr, 1);
+
+    /* Verify SC_KillRts was called */
+    UtAssert_STUB_COUNT(SC_KillRts, 1);
+
+    /* Verify SC_GetNextRtsCommand was NOT called (RTS was killed) */
+    UtAssert_STUB_COUNT(SC_GetNextRtsCommand, 0);
+
     SC_Assert_ID_VALUE(SC_OperData.HkPacket.Payload.LastRtsErrSeq, 1);
     SC_Assert_IDX_VALUE(SC_OperData.HkPacket.Payload.LastRtsErrCmd, 0);
 
@@ -923,7 +979,8 @@ void SC_SendHkPacket_Test(void)
     UtAssert_True(SC_OperData.HkPacket.Payload.NextAtsTime == 0, "SC_OperData.HkPacket.Payload.NextAtsTime == 0");
     UtAssert_True(SC_OperData.HkPacket.Payload.NumRtsActive == 20, "SC_OperData.HkPacket.Payload.NumRtsActive == 20");
     SC_Assert_ID_VALUE(SC_OperData.HkPacket.Payload.RtsNum, 21);
-    UtAssert_True(SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0, "SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0");
+    UtAssert_True(SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0,
+                  "SC_OperData.HkPacket.Payload.NextRtsWakeupCnt == 0");
     UtAssert_BOOL_TRUE(SC_OperData.HkPacket.Payload.ContinueAtsOnFailureFlag);
 
     /* Check first element */
@@ -1076,11 +1133,11 @@ void SC_ProcessRequest_Test_WakeupRtpExecutionTime(void)
 
 void SC_ProcessRequest_Test_WakeupAtpExecutionTime(void)
 {
-    SC_AtsEntryHeader_t *         Entry;
+    SC_AtsEntryHeader_t          *Entry;
     CFE_SB_MsgId_t                TestMsgId = CFE_SB_ValueToMsgId(SC_CMD_MID);
     CFE_MSG_FcnCode_t             FcnCode   = SC_NOOP_CC;
     SC_AtsIndex_t                 AtsIndex  = SC_ATS_IDX_C(0);
-    SC_AtsCmdStatusEntry_t *      StatusEntryPtr;
+    SC_AtsCmdStatusEntry_t       *StatusEntryPtr;
     SC_AtsCmdEntryOffsetRecord_t *CmdOffsetRec;
 
     SC_AppData.NextCmdTime[SC_Process_ATP] = 0;
@@ -1119,7 +1176,7 @@ void SC_ProcessRequest_Test_WakeupRtpExecutionTimeTooManyCmds(void)
 
     SC_AppData.NextCmdTime[SC_Process_RTP] = 0;
     SC_AppData.NextCmdTime[SC_Process_ATP] = 0;
-    SC_OperData.NumCmdsWakeup                 = 1000;
+    SC_OperData.NumCmdsWakeup              = 1000;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_EXECUTING;
 
     /* Execute the function being tested */
@@ -1135,7 +1192,7 @@ void SC_ProcessRequest_Test_WakeupAtpExecutionTimeTooManyCmds(void)
 {
     SC_AppData.NextCmdTime[SC_Process_ATP] = 10;
     SC_AppData.CurrentTime                 = 100;
-    SC_OperData.NumCmdsWakeup                 = 1000;
+    SC_OperData.NumCmdsWakeup              = 1000;
     SC_OperData.AtsCtrlBlckAddr->AtpState  = SC_Status_IDLE;
 
     /* Execute the function being tested */
@@ -1664,8 +1721,10 @@ void UtTest_Setup(void)
     UtTest_Add(SC_ProcessRtpCommand_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRtpCommand_Test_Nominal");
     UtTest_Add(SC_ProcessRtpCommand_Test_BadSoftwareBusReturn, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRtpCommand_Test_BadSoftwareBusReturn");
-    UtTest_Add(SC_ProcessRtpCommand_Test_BadChecksum, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRtpCommand_Test_BadChecksum");
+    UtTest_Add(SC_ProcessRtpCommand_Test_ChecksumFailedRtsContinue, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRtpCommand_Test_ChecksumFailedRtsContinue");
+    UtTest_Add(SC_ProcessRtpCommand_Test_ChecksumFailedRts, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ProcessRtpCommand_Test_ChecksumFailedRts");
     UtTest_Add(SC_ProcessRtpCommand_Test_NextCmdTime, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRtpCommand_Test_NextCmdTime");
     UtTest_Add(SC_ProcessRtpCommand_Test_RtsNumZero, SC_Test_Setup, SC_Test_TearDown,
@@ -1680,8 +1739,7 @@ void UtTest_Setup(void)
                "SC_ProcessRequest_Test_HkMIDAutoStartRts");
     UtTest_Add(SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_HkMIDAutoStartRtsLoaded");
-    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown,
-               "SC_ProcessRequest_Test_WakeupNONE");
+    UtTest_Add(SC_ProcessRequest_Test_WakeupNONE, SC_Test_Setup, SC_Test_TearDown, "SC_ProcessRequest_Test_WakeupNONE");
     UtTest_Add(SC_ProcessRequest_Test_WakeupRtpNotExecutionTime, SC_Test_Setup, SC_Test_TearDown,
                "SC_ProcessRequest_Test_WakeupRtpNotExecutionTime");
     UtTest_Add(SC_ProcessRequest_Test_WakeupNoSwitchPending, SC_Test_Setup, SC_Test_TearDown,

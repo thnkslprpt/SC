@@ -177,4 +177,20 @@ void SC_KillRts(SC_RtsIndex_t RtsIndex);
  */
 void SC_AutoStartRts(SC_RtsNum_t RtsNum);
 
+/**
+ * \brief Lets an RTS continue if a command failed the checksum
+ *
+ *  \par Description
+ *         This routine sets whether or not to let an RTS continue when
+ *         one of the commands in the RTS fails a checksum validation
+ *
+ *  \par Assumptions, External Events, and Notes:
+ *        None
+ *
+ *  \param[in] Cmd Pointer to Software Bus buffer
+ *
+ *  \sa #SC_CONTINUE_RTS_ON_FAILURE_CC
+ */
+void SC_ContinueRtsOnFailureCmd(const SC_ContinueRtsOnFailureCmd_t *Cmd);
+
 #endif
