@@ -362,7 +362,7 @@
  *       Successful execution of this command may be verified with
  *       the following telemetry:
  *       - #SC_HkTlm_Payload_t.CmdCtr will increment
- *       - The #SC_CONT_CMD_INF_EID will be sent
+ *       - The #SC_CONT_ATS_CMD_INF_EID will be sent
  *
  *  \par Error Conditions
  *       This command may fail for the following reason(s):
@@ -377,6 +377,37 @@
  *       None
  */
 #define SC_CONTINUE_ATS_ON_FAILURE_CC 10
+
+/**
+ * \brief Set the Continue-On-Checksum-Failure flag
+ *
+ *  \par Description
+ *       Sets the flag which specifies whether or not to continue
+ *        processing an RTS if one of the commands in the RTS fails
+ *        checksum validation before being sent out.
+ *
+ *  \par Command Structure
+ *       #SC_ContinueRtsOnFailureCmd_t
+ *
+ *  \par Command Verification
+ *       Successful execution of this command may be verified with
+ *       the following telemetry:
+ *       - #SC_HkTlm_Payload_t.CmdCtr will increment
+ *       - The #SC_CONT_RTS_CMD_INF_EID will be sent
+ *
+ *  \par Error Conditions
+ *       This command may fail for the following reason(s):
+ *       - Command packet length not as expected
+ *       - Invalid State specified
+ *
+ *  \par Evidence of failure may be found in the following telemetry:
+ *       - #SC_HkTlm_Payload_t.CmdErrCtr will increment
+ *       - Error specific event message
+ *
+ *  \par Criticality
+ *       None
+ */
+#define SC_CONTINUE_RTS_ON_FAILURE_CC 12
 
 /**
  * \brief Append to an ATS table
@@ -443,7 +474,7 @@
  *  \par Criticality
  *       None
  */
-#define SC_MANAGE_TABLE_CC 12
+#define SC_MANAGE_TABLE_CC 13
 
 /**
  * \brief START a group of RTS
@@ -484,7 +515,7 @@
  *
  *  \sa #SC_STOP_RTS_GRP_CC
  */
-#define SC_START_RTS_GRP_CC 13
+#define SC_START_RTS_GRP_CC 14
 
 /**
  * \brief STOP a group of RTS
@@ -524,7 +555,7 @@
  *
  *  \sa #SC_START_RTS_GRP_CC
  */
-#define SC_STOP_RTS_GRP_CC 14
+#define SC_STOP_RTS_GRP_CC 15
 
 /**
  * \brief DISABLE a group of RTS
@@ -562,7 +593,7 @@
  *
  *  \sa #SC_ENABLE_RTS_GRP_CC
  */
-#define SC_DISABLE_RTS_GRP_CC 15
+#define SC_DISABLE_RTS_GRP_CC 16
 
 /**
  * \brief ENABLE a group of RTS
@@ -600,7 +631,7 @@
  *
  *  \sa #SC_DISABLE_RTS_GRP_CC
  */
-#define SC_ENABLE_RTS_GRP_CC 16
+#define SC_ENABLE_RTS_GRP_CC 17
 
 /**\}*/
 

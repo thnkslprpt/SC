@@ -336,7 +336,19 @@
  *  \par Limits:
  *       Must be SC_AtsCont_TRUE or SC_AtsCont_FALSE
  */
-#define SC_CONT_ON_FAILURE_START SC_AtsCont_TRUE
+#define SC_CONT_ON_ATS_FAILURE_START SC_AtsCont_TRUE
+
+/**
+ * \brief Defines default state of Continue-Rts-On-Checksum-Failure Flag
+ *
+ *  \par Description:
+ *       This parameter specifies the default state to continue an RTS
+ *       when a command in the RTS fails checksum validation
+ *
+ *  \par Limits:
+ *       Must be SC_RtsCont_TRUE or SC_RtsCont_FALSE
+ */
+#define SC_CONT_ON_RTS_FAILURE_START SC_RtsCont_TRUE
 
 /**
  * \brief Defines the TIME SC should use for its commands

@@ -599,3 +599,33 @@ void SC_AutoStartRts(SC_RtsNum_t RtsNum)
                           "RTS autostart error: invalid RTS ID %u", SC_IDNUM_AS_UINT(RtsNum));
     }
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                                                                 */
+/* Continue RTS if a command in the RTS fails                     */
+/*                                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+void SC_ContinueRtsOnFailureCmd(const SC_ContinueRtsOnFailureCmd_t *Cmd)
+{
+    SC_RtsCont_Enum_t State;
+
+    State = Cmd->Payload.ContinueState;
+
+    if (State != SC_RtsCont_TRUE && State != SC_RtsCont_FALSE)
+    {
+        SC_OperData.HkPacket.Payload.CmdErrCtr++;
+
+        CFE_EVS_SendEvent(SC_CONT_RTS_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "Continue RTS On Failure command  failed, invalid state: %lu", (unsigned long)State);
+    }
+    else
+    {
+        SC_OperData.HkPacket.Payload.ContinueRtsOnFailureFlag = State;
+
+        SC_OperData.HkPacket.Payload.CmdCtr++;
+
+        CFE_EVS_SendEvent(SC_CONT_RTS_CMD_INF_EID, CFE_EVS_EventType_INFORMATION,
+                          "Continue-RTS-On-Failure command, State: %lu",
+                          (unsigned long)State);
+    }
+}

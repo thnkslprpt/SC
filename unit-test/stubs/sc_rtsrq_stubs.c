@@ -145,3 +145,15 @@ void SC_StopRtsGrpCmd(const SC_StopRtsGrpCmd_t *Cmd)
 
     UT_GenStub_Execute(SC_StopRtsGrpCmd, Basic, NULL);
 }
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SC_ContinueRtsOnFailureCmd()
+ * ----------------------------------------------------
+ */
+void SC_ContinueRtsOnFailureCmd(const SC_ContinueRtsOnFailureCmd_t *Cmd)
+{
+    UT_GenStub_AddParam(SC_ContinueRtsOnFailureCmd, const SC_ContinueRtsOnFailureCmd_t *, Cmd);
+
+    UT_GenStub_Execute(SC_ContinueRtsOnFailureCmd, Basic, NULL);
+}
