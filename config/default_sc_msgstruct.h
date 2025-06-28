@@ -226,16 +226,6 @@ typedef struct
     SC_SetContinueAtsOnFailureCmd_Payload_t Payload;
 } SC_ContinueAtsOnFailureCmd_t;
 
-/**
- *  \brief Manage Table Command
- *
- *  For command details see #SC_MANAGE_TABLE_CC
- */
-typedef struct
-{
-    CFE_MSG_CommandHeader_t     CommandHeader; /**< \brief Command Header */
-    CFE_TBL_NotifyCmd_Payload_t Payload;
-} SC_ManageTableCmd_t;
 
 /**
  *  \brief RTS Group Command

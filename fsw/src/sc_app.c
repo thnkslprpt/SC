@@ -103,7 +103,8 @@ void SC_AppMain(void)
         }
         else if (Result == CFE_SB_TIME_OUT)
         {
-            /* no action, but also no error */
+            /* Perform table maintenance when no other work to do */
+            SC_ManageAllTables();
         }
         else
         {
@@ -300,9 +301,6 @@ CFE_Status_t SC_InitTables(void)
     {
         return Result;
     }
-
-    /* Register for table update notification commands */
-    SC_RegisterManageCmds();
 
     return CFE_SUCCESS;
 }
@@ -572,42 +570,96 @@ void SC_LoadDefaultTables(void)
                       "RTS table files not loaded at initialization = %d of %d", (int)NotLoadedCount, SC_NUMBER_OF_RTS);
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* Register to receive cFE table manage request commands           */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-void SC_RegisterManageCmds(void)
+CFE_Status_t SC_ManageAllTables(void)
 {
-    int32 i;
+    CFE_Status_t Result = CFE_SUCCESS;
+    CFE_Status_t LocalResult;
+    int32        i;
+    void        *TblPtrNew;
 
-    CFE_TBL_Handle_t TblHandles[5] = {SC_OperData.RtsInfoHandle, SC_OperData.RtsCtrlBlckHandle,
-                                      SC_OperData.AtsInfoHandle, SC_OperData.AtsCtrlBlckHandle,
-                                      SC_OperData.AppendTblHandle};
-    uint32           params[5]     = {SC_TBL_ID_RTS_INFO, SC_TBL_ID_RTP_CTRL, SC_TBL_ID_ATS_INFO, SC_TBL_ID_ATP_CTRL,
-                        SC_TBL_ID_APPEND};
+    /* Manage dump-only tables - just call CFE_TBL_Manage */
 
-    for (i = 0; i < 5; i++)
-    {
-        CFE_TBL_NotifyByMessage(TblHandles[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC, params[i]);
-    }
+    /* RTS Info table */
+    CFE_TBL_Manage(SC_OperData.RtsInfoHandle);
 
+    /* RTS Control Block table */
+    CFE_TBL_Manage(SC_OperData.RtsCtrlBlckHandle);
+
+    /* ATS Info table */
+    CFE_TBL_Manage(SC_OperData.AtsInfoHandle);
+
+    /* ATS Control Block table */
+    CFE_TBL_Manage(SC_OperData.AtsCtrlBlckHandle);
+
+    /* ATS Command Status tables */
     for (i = 0; i < SC_NUMBER_OF_ATS; i++)
     {
-        /* Register for ATS cmd status table manage request commands */
-        CFE_TBL_NotifyByMessage(SC_OperData.AtsCmdStatusHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                                SC_TBL_ID_ATS_CMD_0 + i);
-
-        /* Register for ATS table manage request commands */
-        CFE_TBL_NotifyByMessage(SC_OperData.AtsTblHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                                SC_TBL_ID_ATS_0 + i);
+        CFE_TBL_Manage(SC_OperData.AtsCmdStatusHandle[i]);
     }
 
+    /* Manage loadable tables - release, manage, re-acquire, check for updates */
+
+    /* Append table */
+    CFE_TBL_ReleaseAddress(SC_OperData.AppendTblHandle);
+    CFE_TBL_Manage(SC_OperData.AppendTblHandle);
+    LocalResult = CFE_TBL_GetAddress(&TblPtrNew, SC_OperData.AppendTblHandle);
+    SC_OperData.AppendTblAddr = TblPtrNew;
+    if (LocalResult == CFE_TBL_INFO_UPDATED)
+    {
+        SC_UpdateAppend();
+    }
+    else if ((LocalResult != CFE_SUCCESS) && (LocalResult != CFE_TBL_ERR_NEVER_LOADED))
+    {
+        CFE_EVS_SendEvent(SC_TABLE_MANAGE_APPEND_ERR_EID, CFE_EVS_EventType_ERROR,
+                          "ATS Append table manage process error: Result = 0x%X", (unsigned int)LocalResult);
+        Result = LocalResult;
+    }
+
+    /* ATS tables */
+    for (i = 0; i < SC_NUMBER_OF_ATS; i++)
+    {
+        CFE_TBL_ReleaseAddress(SC_OperData.AtsTblHandle[i]);
+        CFE_TBL_Manage(SC_OperData.AtsTblHandle[i]);
+        LocalResult = CFE_TBL_GetAddress(&TblPtrNew, SC_OperData.AtsTblHandle[i]);
+        SC_OperData.AtsTblAddr[i] = TblPtrNew;
+        if (LocalResult == CFE_TBL_INFO_UPDATED)
+        {
+            SC_LoadAts(SC_ATS_IDX_C(i));
+        }
+        else if ((LocalResult != CFE_SUCCESS) && (LocalResult != CFE_TBL_ERR_NEVER_LOADED))
+        {
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_ATS_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "ATS table manage process error: ATS = %u, Result = 0x%X",
+                              SC_IDNUM_AS_UINT(SC_AtsIndexToNum(SC_ATS_IDX_C(i))), (unsigned int)LocalResult);
+            if (Result == CFE_SUCCESS)
+            {
+                Result = LocalResult;
+            }
+        }
+    }
+
+    /* RTS tables */
     for (i = 0; i < SC_NUMBER_OF_RTS; i++)
     {
-        /* Register for RTS table manage request commands */
-        CFE_TBL_NotifyByMessage(SC_OperData.RtsTblHandle[i], CFE_SB_ValueToMsgId(SC_CMD_MID), SC_MANAGE_TABLE_CC,
-                                SC_TBL_ID_RTS_0 + i);
+        CFE_TBL_ReleaseAddress(SC_OperData.RtsTblHandle[i]);
+        CFE_TBL_Manage(SC_OperData.RtsTblHandle[i]);
+        LocalResult = CFE_TBL_GetAddress(&TblPtrNew, SC_OperData.RtsTblHandle[i]);
+        SC_OperData.RtsTblAddr[i] = TblPtrNew;
+        if (LocalResult == CFE_TBL_INFO_UPDATED)
+        {
+            SC_LoadRts(SC_RTS_IDX_C(i));
+        }
+        else if ((LocalResult != CFE_SUCCESS) && (LocalResult != CFE_TBL_ERR_NEVER_LOADED))
+        {
+            CFE_EVS_SendEvent(SC_TABLE_MANAGE_RTS_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "RTS table manage process error: RTS = %u, Result = 0x%X",
+                              SC_IDNUM_AS_UINT(SC_RtsIndexToNum(SC_RTS_IDX_C(i))), (unsigned int)LocalResult);
+            if (Result == CFE_SUCCESS)
+            {
+                Result = LocalResult;
+            }
+        }
     }
+
+    return Result;
 }

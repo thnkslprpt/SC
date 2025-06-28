@@ -408,42 +408,6 @@
  */
 #define SC_APPEND_ATS_CC 11
 
-/**
- * \brief Request from cFE Table Services to manage a table
- *
- *  \par Description
- *       This command signals a need for the host application (SC)
- *       to allow cFE Table Services to manage the specified table.
- *       For loadable tables, this command indicates that a table
- *       update is available.  For dump only tables, this command
- *       indicates that cFE Table Services wants to dump the table
- *       data.  In either case, the host application must call the
- *       table manage API function so that the pending function
- *       can be executed within the context of the host.
- *
- *       Note: There is no reason for this command to be sent from
- *       any source other than cFE Table Services.
- *
- *  \par Command Structure
- *       #SC_ManageTableCmd_t
- *
- *  \par Command Verification
- *       Successful execution of this command may be verified via:
- *       - cFE Table Services housekeeping telemetry
- *
- *  \par Error Conditions
- *       This command may fail for the following reason(s):
- *       - Invalid table ID
- *       - Unexpected result during manage of loadable table
- *
- *  \par Evidence of failure for this command may be verified via:
- *       - cFE Table Services housekeeping telemetry
- *       - Error specific SC event message
- *
- *  \par Criticality
- *       None
- */
-#define SC_MANAGE_TABLE_CC 12
 
 /**
  * \brief START a group of RTS

@@ -687,6 +687,201 @@ void SC_LoadDefaultTables_Test(void)
     UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2);
 }
 
+void SC_ManageAllTables_Test_Nominal(void)
+{
+    /* Setup for updated tables */
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_INFO_UPDATED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_SUCCESS);
+
+    /* Verify results */
+    UtAssert_STUB_COUNT(CFE_TBL_Manage, 4 + SC_NUMBER_OF_ATS + 1 + SC_NUMBER_OF_ATS + SC_NUMBER_OF_RTS); /* All tables */
+    UtAssert_STUB_COUNT(CFE_TBL_ReleaseAddress, 1 + SC_NUMBER_OF_ATS + SC_NUMBER_OF_RTS); /* Loadable tables */
+    UtAssert_STUB_COUNT(CFE_TBL_GetAddress, 1 + SC_NUMBER_OF_ATS + SC_NUMBER_OF_RTS); /* Loadable tables */
+}
+
+void SC_ManageAllTables_Test_AppendTableError(void)
+{
+    int32 GetAddressCount = 0;
+    
+    /* Setup for error on Append table */
+    /* Skip the dump-only table calls */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_UNREGISTERED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_TBL_ERR_UNREGISTERED);
+
+    /* Verify results */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_APPEND_ERR_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
+void SC_ManageAllTables_Test_ATSTableError(void)
+{
+    int32 GetAddressCount = 0;
+    
+    /* Setup for success on Append table, error on first ATS table */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_INFO_UPDATED);
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_UNREGISTERED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_TBL_ERR_UNREGISTERED);
+
+    /* Verify results */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_ATS_ERR_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
+void SC_ManageAllTables_Test_RTSTableError(void)
+{
+    int32 GetAddressCount = 0;
+    int32 i;
+    
+    /* Setup for success on Append table and all ATS tables */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_INFO_UPDATED);
+    for (i = 0; i < SC_NUMBER_OF_ATS; i++)
+    {
+        UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_INFO_UPDATED);
+    }
+    /* Error on first RTS table */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_UNREGISTERED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_TBL_ERR_UNREGISTERED);
+
+    /* Verify results */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_RTS_ERR_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 1);
+}
+
+void SC_ManageAllTables_Test_MultipleErrors(void)
+{
+    int32 GetAddressCount = 0;
+    int32 i;
+    
+    /* Setup for error on Append table */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_UNREGISTERED);
+    
+    /* Setup for error on first ATS table */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_UNREGISTERED);
+    for (i = 1; i < SC_NUMBER_OF_ATS; i++)
+    {
+        UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_INFO_UPDATED);
+    }
+    
+    /* Error on first RTS table */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_UNREGISTERED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    /* Should return the first error encountered (Append table error) */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_TBL_ERR_UNREGISTERED);
+
+    /* Verify results - all errors should be reported */
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[0].EventID, SC_TABLE_MANAGE_APPEND_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[1].EventID, SC_TABLE_MANAGE_ATS_ERR_EID);
+    UtAssert_INT32_EQ(context_CFE_EVS_SendEvent[2].EventID, SC_TABLE_MANAGE_RTS_ERR_EID);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 3);
+}
+
+void SC_ManageAllTables_Test_AppendTableNeverLoaded(void)
+{
+    int32 GetAddressCount = 0;
+    
+    /* Setup for CFE_TBL_ERR_NEVER_LOADED on Append table */
+    /* Skip the dump-only table calls */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_TBL_ERR_NEVER_LOADED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    /* Should return CFE_SUCCESS since CFE_TBL_ERR_NEVER_LOADED is handled gracefully */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_SUCCESS);
+
+    /* Verify results - no error event should be sent */
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+}
+
+void SC_ManageAllTables_Test_AppendTableSuccess(void)
+{
+    int32 GetAddressCount = 0;
+    
+    /* Setup for CFE_SUCCESS on Append table (not CFE_TBL_INFO_UPDATED) */
+    /* Skip the dump-only table calls */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount, CFE_SUCCESS);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    /* Should return CFE_SUCCESS since CFE_SUCCESS is a valid return */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_SUCCESS);
+
+    /* Verify results - no error event should be sent, and SC_UpdateAppend should not be called */
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+    UtAssert_STUB_COUNT(SC_UpdateAppend, 0);
+}
+
+void SC_ManageAllTables_Test_ATSTableNeverLoaded(void)
+{
+    int32 GetAddressCount = 0;
+    
+    /* Setup for updated tables */
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_INFO_UPDATED);
+    
+    /* Setup for CFE_TBL_ERR_NEVER_LOADED on first ATS table */
+    /* Skip the dump-only table calls and append table */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount + 1, CFE_TBL_ERR_NEVER_LOADED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    /* Should return CFE_SUCCESS since CFE_TBL_ERR_NEVER_LOADED is handled gracefully */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_SUCCESS);
+
+    /* Verify results - no error event should be sent */
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+}
+
+void SC_ManageAllTables_Test_RTSTableNeverLoaded(void)
+{
+    int32 GetAddressCount = 0;
+    
+    /* Setup for updated tables */
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_INFO_UPDATED);
+    
+    /* Setup for CFE_TBL_ERR_NEVER_LOADED on first RTS table */
+    /* Skip the dump-only table calls, append table, and ATS tables */
+    UT_SetDeferredRetcode(UT_KEY(CFE_TBL_GetAddress), ++GetAddressCount + 1 + SC_NUMBER_OF_ATS, CFE_TBL_ERR_NEVER_LOADED);
+    
+    /* Set table addresses */
+    UT_SetHandlerFunction(UT_KEY(CFE_TBL_GetAddress), UT_Handler_CFE_TBL_GetAddress, NULL);
+
+    /* Execute the function being tested */
+    /* Should return CFE_SUCCESS since CFE_TBL_ERR_NEVER_LOADED is handled gracefully */
+    UtAssert_INT32_EQ(SC_ManageAllTables(), CFE_SUCCESS);
+
+    /* Verify results - no error event should be sent */
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 0);
+}
+
 void UtTest_Setup(void)
 {
     UtTest_Add(SC_AppMain_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_AppMain_Test_Nominal");
@@ -753,4 +948,21 @@ void UtTest_Setup(void)
     UtTest_Add(SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS, SC_Test_Setup, SC_Test_TearDown,
                "SC_GetLoadTablePointers_Test_ErrorGetAddressLoadableRTS");
     UtTest_Add(SC_LoadDefaultTables_Test, SC_Test_Setup, SC_Test_TearDown, "SC_LoadDefaultTables_Test");
+    UtTest_Add(SC_ManageAllTables_Test_Nominal, SC_Test_Setup, SC_Test_TearDown, "SC_ManageAllTables_Test_Nominal");
+    UtTest_Add(SC_ManageAllTables_Test_AppendTableError, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_AppendTableError");
+    UtTest_Add(SC_ManageAllTables_Test_ATSTableError, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_ATSTableError");
+    UtTest_Add(SC_ManageAllTables_Test_RTSTableError, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_RTSTableError");
+    UtTest_Add(SC_ManageAllTables_Test_MultipleErrors, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_MultipleErrors");
+    UtTest_Add(SC_ManageAllTables_Test_AppendTableNeverLoaded, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_AppendTableNeverLoaded");
+    UtTest_Add(SC_ManageAllTables_Test_AppendTableSuccess, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_AppendTableSuccess");
+    UtTest_Add(SC_ManageAllTables_Test_ATSTableNeverLoaded, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_ATSTableNeverLoaded");
+    UtTest_Add(SC_ManageAllTables_Test_RTSTableNeverLoaded, SC_Test_Setup, SC_Test_TearDown,
+               "SC_ManageAllTables_Test_RTSTableNeverLoaded");
 }

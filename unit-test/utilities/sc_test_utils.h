@@ -73,7 +73,6 @@ typedef union
     SC_JumpAtsCmd_t              JumpAtsCmd;
     SC_ContinueAtsOnFailureCmd_t ContinueAtsOnFailureCmd;
     SC_AppendAtsCmd_t            AppendAtsCmd;
-    SC_ManageTableCmd_t          ManageTableCmd;
     SC_StartRtsGrpCmd_t          StartRtsGrpCmd;
     SC_StopRtsGrpCmd_t           StopRtsGrpCmd;
     SC_DisableRtsGrpCmd_t        DisableRtsGrpCmd;

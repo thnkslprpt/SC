@@ -228,13 +228,6 @@ void SC_ProcessCommand(const CFE_SB_Buffer_t *BufPtr)
             }
             break;
 
-        case SC_MANAGE_TABLE_CC:
-            if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_ManageTableCmd_t)))
-            {
-                SC_ManageTableCmd((const SC_ManageTableCmd_t *)BufPtr);
-            }
-            break;
-
         case SC_START_RTS_GRP_CC:
             if (SC_VerifyCmdLength(&BufPtr->Msg, sizeof(SC_StartRtsGrpCmd_t)))
             {
