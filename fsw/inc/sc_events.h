@@ -1245,28 +1245,6 @@
 #define SC_BEGINATS_INVLD_INDEX_ERR_EID 128
 
 /**
- * \brief SC RTS Table Manage RTS Index Invalid Event ID
- *
- *  \par Type: ERROR
- *
- *  \par Cause:
- *  This event message is issued when an invalid RTS index is received
- *  in the SC_ManageRtsTable function
- */
-#define SC_TABLE_MANAGE_RTS_INV_INDEX_ERR_EID 129
-
-/**
- * \brief SC ATS Table Manage ATS Index Invalid Event ID
- *
- *  \par Type: ERROR
- *
- *  \par Cause:
- *  This event message is issued when an invalid ATS index is received
- *  in the SC_ManageAtsTable function
- */
-#define SC_TABLE_MANAGE_ATS_INV_INDEX_ERR_EID 130
-
-/**
  * \brief SC ATS Table Load ATS Index Invalid Event ID
  *
  *  \par Type: ERROR
