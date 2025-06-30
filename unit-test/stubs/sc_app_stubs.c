@@ -146,10 +146,10 @@ CFE_Status_t SC_RegisterLoadableTables(void)
 
 /*
  * ----------------------------------------------------
- * Generated stub function for SC_RegisterManageCmds()
+ * Generated stub function for SC_ManageTables()
  * ----------------------------------------------------
  */
-void SC_RegisterManageCmds(void)
+void SC_ManageTables(void)
 {
-    UT_GenStub_Execute(SC_RegisterManageCmds, Basic, NULL);
+    UT_GenStub_Execute(SC_ManageTables, Basic, NULL);
 }

@@ -222,25 +222,16 @@ CFE_Status_t SC_GetLoadTablePointers(void);
 void SC_LoadDefaultTables(void);
 
 /**
- * \brief Register to receive cFE Table Services manage request commands
+ * \brief Manage all SC tables
  *
  *  \par Description
- *       This function provides cFE Table Services with the information
- *       necessary to send a notification command when one of the SC dump
- *       only tables has a dump pending, or when one of the SC loadable
- *       tables has a load pending.  Upon receipt of the command, the
- *       command handler will call the cFE Table Services API function
- *       to manage the table.  This sequence of events ensures that dump
- *       tables are not being updated by SC at the same moment that the
- *       dump occurs, and likewise, that loadable tables are not being
- *       referenced by SC at the moment that the update occurs.
+ *       This function checks and manages all SC tables and provides
+ *       an opportunity to reload them if they have been updated.
  *
  *  \par Assumptions, External Events, and Notes:
- *        None
- *
- *  \sa #SC_ManageTableCmd
+ *       None
  */
-void SC_RegisterManageCmds(void);
+void SC_ManageTables(void);
 
 /************************************************************************
  * Macro Definitions
